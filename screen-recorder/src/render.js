@@ -7,23 +7,33 @@ const { Menu, dialog } = require("@electron/remote");
 // Global state
 let mediaRecorder; // MediaRecorder instance to capture footage
 const recordedChunks = [];
-
+let inputSources;
 // Buttons
 const videoElement = document.querySelector("video");
-
 const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+stopBtn.disabled = true;
+
 startBtn.onclick = (e) => {
+  stopBtn.disabled = false;
+  startBtn.disabled = true;
   mediaRecorder.start();
   startBtn.classList.add("is-danger");
-  startBtn.innerText = "Recording";
+  startBtn.innerHTML = "<i class='fas fa-record-vinyl '></i>";
 };
 
-const stopBtn = document.getElementById("stopBtn");
-
 stopBtn.onclick = (e) => {
+  stopBtn.disabled = true;
+  startBtn.disabled = false;
   mediaRecorder.stop();
   startBtn.classList.remove("is-danger");
-  startBtn.innerText = "Start";
+  startBtn.innerHTML = "<i class='fas fa-play-circle'></i>";
+};
+
+const captureBtn = document.querySelector("#captureBtn");
+
+captureBtn.onclick = (e) => {
+  console.log(inputSources[0].thumbnail.toDataURL());
 };
 
 const videoSelectBtn = document.getElementById("videoSelectBtn");
@@ -32,19 +42,21 @@ videoSelectBtn.onclick = getVideoSources;
 // Get the available video sources
 async function getVideoSources() {
   try {
-    const inputSources = await desktopCapturer.getSources({
+    inputSources = await desktopCapturer.getSources({
       types: ["window", "screen"],
     });
 
     const videoOptionsMenu = Menu.buildFromTemplate(
       inputSources
         .map((source) => {
+          console.log(source);
           return {
+            id: source.display_id,
             label: source.name,
             click: () => selectSource(source),
           };
         })
-        .filter(({ label }) => label === "Entire Screen")
+        .filter(({ id }) => Boolean(id))
     );
 
     videoOptionsMenu.popup();

@@ -20,22 +20,27 @@
     <script defer src="render.js"></script>
   </head>
   <body class="content">
-    <h1>⚡ Electron Screen Recorder</h1>
+    <h1 class="text-center">Screen Recorder</h1>
 
-    <video class="screenShare_video"></video>
+    <div class="video__controls">
+      <video class="screenShare_video"></video>
 
-    <button id="startBtn" class="button is-primary btn btn-primary">
-      <i class="fas fa-play-circle"></i>
-    </button>
-    <button id="stopBtn" class="button is-warning btn btn-danger">
-      <i class="fas fa-stop-circle"></i>
-    </button>
+      <div class="button__controls">
+        <button id="startBtn" class="button is-primary btn btn-primary">
+          <i class="fas fa-play-circle"></i>
+        </button>
+        <button id="stopBtn" class="button is-warning btn btn-danger">
+          <i class="fas fa-stop-circle"></i>
+        </button>
+        <button id="captureBtn" class="btn btn-dark">
+          <i class="fa fa-camera" aria-hidden="true"></i>
+        </button>
+        <button id="videoSelectBtn" class="button is-text btn btn-link">
+          Choose a Video Source
+        </button>
+      </div>
+    </div>
 
-    <hr />
-
-    <button id="videoSelectBtn" class="button is-text btn btn-link">
-      Choose a Video Source
-    </button>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
       integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
