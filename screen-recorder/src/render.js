@@ -1,4 +1,4 @@
-const { desktopCapturer } = require("electron");
+const { desktopCapturer, ipcRenderer } = require("electron");
 
 const { writeFile } = require("fs");
 
@@ -15,11 +15,15 @@ const stopBtn = document.getElementById("stopBtn");
 stopBtn.disabled = true;
 
 startBtn.onclick = (e) => {
-  stopBtn.disabled = false;
-  startBtn.disabled = true;
-  mediaRecorder.start();
-  startBtn.classList.add("is-danger");
-  startBtn.innerHTML = "<i class='fas fa-record-vinyl '></i>";
+  const replyValue = ipcRenderer.sendSync("message", "controls");
+  console.log("reply", replyValue);
+  if (replyValue) {
+    stopBtn.disabled = false;
+    startBtn.disabled = true;
+    mediaRecorder.start();
+    startBtn.classList.add("is-danger");
+    startBtn.innerHTML = "<i class='fas fa-record-vinyl '></i>";
+  }
 };
 
 stopBtn.onclick = (e) => {
@@ -113,7 +117,7 @@ async function selectSource(source) {
 
 // Captures all recorded chunks
 function handleDataAvailable(e) {
-  console.log("video data available");
+  console.log("video data available", e);
   recordedChunks.push(e.data);
 }
 
