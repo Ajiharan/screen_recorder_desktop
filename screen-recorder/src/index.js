@@ -32,13 +32,13 @@ const CreateControlWindow = () => {
   const controlWindow = new BrowserWindow({
     width: 800,
     height: 300,
-    ebPreferences: {
+    webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
     },
   });
-  require("@electron/remote/main").enable(controlWindow.webContents);
+  // require("@electron/remote/main").enable(controlWindow.webContents);
   // and load the index.html of the app.
   controlWindow.loadFile(path.join(__dirname, "./components/control.html"));
 
