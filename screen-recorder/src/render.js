@@ -8,6 +8,7 @@ const { Menu, dialog } = require("@electron/remote");
 let mediaRecorder; // MediaRecorder instance to capture footage
 const recordedChunks = [];
 let inputSources;
+let windowScreenSource;
 // Buttons
 const videoElement = document.querySelector("video");
 const startBtn = document.getElementById("startBtn");
@@ -36,39 +37,33 @@ captureBtn.onclick = (e) => {
   console.log(inputSources[0].thumbnail.toDataURL());
 };
 
-const videoSelectBtn = document.getElementById("videoSelectBtn");
-videoSelectBtn.onclick = getVideoSources;
+const videoSelectBtn = document.querySelector(".videoSelectBtn");
+videoSelectBtn.onclick = selectSource;
 
-// Get the available video sources
 async function getVideoSources() {
   try {
     inputSources = await desktopCapturer.getSources({
       types: ["window", "screen"],
     });
 
-    const videoOptionsMenu = Menu.buildFromTemplate(
-      inputSources
-        .map((source) => {
-          console.log(source);
-          return {
-            id: source.display_id,
-            label: source.name,
-            click: () => selectSource(source),
-          };
-        })
-        .filter(({ id }) => Boolean(id))
-    );
-
-    videoOptionsMenu.popup();
+    inputSources.map((source) => {
+      if (source.name === "Entire Screen") {
+        windowScreenSource = source;
+      }
+      return {
+        id: source.display_id,
+        label: source.name,
+        click: () => selectSource(source),
+      };
+    });
   } catch (err) {
     console.log(err);
   }
 }
+getVideoSources();
 
 // Change the videoSource window to record
-async function selectSource(source) {
-  videoSelectBtn.innerText = source.name;
-
+async function selectSource() {
   const constraintAudio = {
     audio: true,
   };
@@ -78,7 +73,7 @@ async function selectSource(source) {
     video: {
       mandatory: {
         chromeMediaSource: "desktop",
-        chromeMediaSourceId: source.id,
+        chromeMediaSourceId: windowScreenSource.id,
       },
     },
   };

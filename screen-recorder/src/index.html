@@ -17,27 +17,47 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+1+Code:wght@200&display=swap"
+      rel="stylesheet"
+    />
     <script defer src="render.js"></script>
   </head>
   <body class="content">
-    <h1 class="text-center">Screen Recorder</h1>
+    <h1 class="text-center">
+      <i class="fas fa-video icon_record"></i>Screen Recorder
+    </h1>
 
-    <div class="video__controls">
-      <video class="screenShare_video"></video>
-
-      <div class="button__controls">
-        <button id="startBtn" class="button is-primary btn btn-primary">
-          <i class="fas fa-play-circle"></i>
+    <div class="video__content">
+      <div class="left__content">
+        <button
+          id="captureBtn"
+          class="btn btn-success videoSelectBtn btn-side-icon"
+        >
+          <i class="fas fa-desktop"></i>
         </button>
-        <button id="stopBtn" class="button is-warning btn btn-danger">
-          <i class="fas fa-stop-circle"></i>
-        </button>
-        <button id="captureBtn" class="btn btn-dark">
+        <button id="captureBtn" class="btn btn-danger btn-side-icon">
           <i class="fa fa-camera" aria-hidden="true"></i>
         </button>
-        <button id="videoSelectBtn" class="button is-text btn btn-link">
-          Choose a Video Source
+        <button id="captureBtn" class="btn btn-primary btn-side-icon">
+          <i class="fas fa-microphone"></i>
         </button>
+      </div>
+      <div class="right__content">
+        <div class="video__controls">
+          <video class="screenShare_video"></video>
+
+          <div class="button__controls">
+            <button id="startBtn" class="button is-primary btn btn-primary">
+              <i class="fas fa-play-circle"></i>
+            </button>
+            <button id="stopBtn" class="button is-warning btn btn-danger">
+              <i class="fas fa-stop-circle"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
