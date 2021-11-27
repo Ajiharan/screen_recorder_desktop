@@ -67,11 +67,11 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("message", async (event, arg) => {
-  console.log("arg", arg);
-  await CreateControlWindow();
-  event.returnValue = "loaded";
-});
+// ipcMain.on("message", async (event, arg) => {
+//   console.log("arg", arg);
+//   await CreateControlWindow();
+//   event.returnValue = "loaded";
+// });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

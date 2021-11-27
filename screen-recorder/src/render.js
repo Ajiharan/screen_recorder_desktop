@@ -21,20 +21,36 @@ micBtn.disabled = true;
 stopBtn.disabled = true;
 startBtn.disabled = true;
 
+let isStartButton = true;
+
 startBtn.onclick = (e) => {
-  stopBtn.disabled = false;
-  startBtn.disabled = true;
-  mediaRecorder.start();
-  startBtn.classList.add("is-danger");
-  startBtn.innerHTML = "<i class='fas fa-record-vinyl'></i>";
+  console.log("mediaRecorder.state", mediaRecorder.state);
+  if (isStartButton) {
+    isStartButton = false;
+    stopBtn.disabled = false;
+    mediaRecorder.start();
+
+    // startBtn.classList.add("is-danger");
+    startBtn.innerHTML = "<i class='fa fa-pause' aria-hidden='true'></i>";
+  } else if (mediaRecorder.state === "paused") {
+    stopBtn.disabled = false;
+    mediaRecorder.resume();
+
+    // startBtn.classList.add("is-danger");
+    startBtn.innerHTML = "<i class='fa fa-pause' aria-hidden='true'></i>";
+  } else {
+    startBtn.innerHTML = "<i class='fas fa-play-circle'></i>";
+    mediaRecorder.pause();
+  }
 };
 
 stopBtn.onclick = (e) => {
+  isStartButton = true;
   stopBtn.disabled = true;
   startBtn.disabled = false;
   mediaRecorder.stop();
   startBtn.classList.remove("is-danger");
-  startBtn.innerHTML = "<i class='fas fa-play-circle'></i>";
+  startBtn.innerHTML = " <i class='fas fa-play-circle'></i>";
 };
 
 const captureBtn = document.querySelector(".captureButton");
@@ -126,14 +142,14 @@ function handleDataAvailable(e) {
 // Saves the video file on stop
 async function handleStop(e) {
   const blob = new Blob(recordedChunks, {
-    type: "video/webm; codecs=vp9",
+    type: "video/mp4; codecs=vp9",
   });
 
   const buffer = Buffer.from(await blob.arrayBuffer());
 
   const { filePath } = await dialog.showSaveDialog({
     buttonLabel: "Save video",
-    defaultPath: `vid-${Date.now()}.webm`,
+    defaultPath: `vid-${Date.now()}.mp4`,
   });
 
   if (filePath) {
