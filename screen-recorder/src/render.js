@@ -32,7 +32,6 @@ micBtn.onclick = (e) => {
 };
 
 startBtn.onclick = (e) => {
-  console.log("mediaRecorder.state", mediaRecorder.state);
   if (isStartButton) {
     isStartButton = false;
     stopBtn.disabled = false;
