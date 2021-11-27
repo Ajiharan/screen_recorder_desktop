@@ -1,6 +1,6 @@
 require("@electron/remote/main").initialize();
 
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -14,6 +14,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 800,
+    icon: __dirname + "./Icon/i1.png",
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -28,23 +29,6 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-const CreateControlWindow = () => {
-  const controlWindow = new BrowserWindow({
-    width: 800,
-    height: 300,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    },
-  });
-  // require("@electron/remote/main").enable(controlWindow.webContents);
-  // and load the index.html of the app.
-  controlWindow.loadFile(path.join(__dirname, "./components/control.html"));
-
-  // Open the DevTools.
-  controlWindow.webContents.openDevTools();
-};
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -66,12 +50,6 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-// ipcMain.on("message", async (event, arg) => {
-//   console.log("arg", arg);
-//   await CreateControlWindow();
-//   event.returnValue = "loaded";
-// });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
