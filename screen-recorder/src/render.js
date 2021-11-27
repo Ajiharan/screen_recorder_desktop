@@ -11,9 +11,15 @@ let inputSources;
 let windowScreenSource;
 // Buttons
 const videoElement = document.querySelector("video");
-const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
+const startBtn = document.querySelector(".startBtn");
+const stopBtn = document.querySelector(".stopBtn");
+const captureButton = document.querySelector(".captureButton");
+const micBtn = document.querySelector(".micBtn");
+
+captureButton.disabled = true;
+micBtn.disabled = true;
 stopBtn.disabled = true;
+startBtn.disabled = true;
 
 startBtn.onclick = (e) => {
   stopBtn.disabled = false;
@@ -31,7 +37,7 @@ stopBtn.onclick = (e) => {
   startBtn.innerHTML = "<i class='fas fa-play-circle'></i>";
 };
 
-const captureBtn = document.querySelector("#captureBtn");
+const captureBtn = document.querySelector(".captureButton");
 
 captureBtn.onclick = (e) => {
   console.log(inputSources[0].thumbnail.toDataURL());
@@ -64,6 +70,11 @@ getVideoSources();
 
 // Change the videoSource window to record
 async function selectSource() {
+  captureButton.disabled = false;
+  micBtn.disabled = false;
+  videoSelectBtn.disabled = true;
+  startBtn.disabled = false;
+
   const constraintAudio = {
     audio: true,
   };

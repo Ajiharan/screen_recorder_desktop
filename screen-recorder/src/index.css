@@ -29,9 +29,8 @@ body {
   margin-top: 1rem;
 }
 
-.button__controls #startBtn,
-#captureBtn,
-#stopBtn {
+.sideIconButton {
+  position: relative;
   padding: 0.4rem;
   border-radius: 50%;
 }
@@ -58,4 +57,62 @@ body {
 .icon_record {
   color: coral;
   font-size: 3.5rem;
+}
+
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes breathe2 {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn_animmate {
+  height: 50px;
+  width: 50px;
+  border: none;
+  border-radius: 100%;
+  background-color: rgb(85, 231, 85);
+}
+
+.btn_animmate::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2.4px;
+  z-index: 2;
+  width: 54px;
+  height: 54px;
+  background: rgb(85, 231, 85);
+  opacity: 0.3;
+  border-radius: 100%;
+  animation: breathe2 2s infinite;
+}
+.btn_animmate::after {
+  content: "";
+  position: absolute;
+  top: -3.4px;
+  left: -3.4px;
+  z-index: 2;
+  width: 53px;
+  height: 53px;
+  background: rgb(85, 231, 85);
+  opacity: 0.3;
+  border-radius: 100%;
+  animation: breathe 2s infinite;
 }

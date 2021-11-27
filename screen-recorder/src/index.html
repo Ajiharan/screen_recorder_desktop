@@ -33,30 +33,50 @@
     <div class="video__content">
       <div class="left__content">
         <button
-          id="captureBtn"
-          class="btn btn-success videoSelectBtn btn-side-icon"
+          class="
+            btn btn-success
+            videoSelectBtn
+            btn-side-icon
+            sideIconButton
+            btn_animmate
+          "
         >
           <i class="fas fa-desktop"></i>
         </button>
-        <button id="captureBtn" class="btn btn-danger btn-side-icon">
+        <button
+          class="btn btn-danger btn-side-icon captureButton sideIconButton"
+        >
           <i class="fa fa-camera" aria-hidden="true"></i>
         </button>
-        <button id="captureBtn" class="btn btn-primary btn-side-icon">
+        <button class="btn btn-primary btn-side-icon micBtn sideIconButton">
           <i class="fas fa-microphone"></i>
+        </button>
+        <button
+          class="
+            button
+            is-primary
+            btn btn-primary btn-side-icon
+            startBtn
+            sideIconButton
+          "
+        >
+          <i class="fas fa-play-circle"></i>
+        </button>
+        <button
+          class="
+            button
+            is-warning
+            btn btn-danger btn-side-icon
+            stopBtn
+            sideIconButton
+          "
+        >
+          <i class="fas fa-stop-circle"></i>
         </button>
       </div>
       <div class="right__content">
         <div class="video__controls">
           <video class="screenShare_video"></video>
-
-          <div class="button__controls">
-            <button id="startBtn" class="button is-primary btn btn-primary">
-              <i class="fas fa-play-circle"></i>
-            </button>
-            <button id="stopBtn" class="button is-warning btn btn-danger">
-              <i class="fas fa-stop-circle"></i>
-            </button>
-          </div>
         </div>
       </div>
     </div>
