@@ -1,14 +1,16 @@
-const { desktopCapturer, ipcRenderer } = require("electron");
+const { desktopCapturer } = require("electron");
 
 const { writeFile } = require("fs");
 
-const { Menu, dialog } = require("@electron/remote");
+const { dialog } = require("@electron/remote");
 
 // Global state
 let mediaRecorder; // MediaRecorder instance to capture footage
 const recordedChunks = [];
 let inputSources;
 let windowScreenSource;
+let isStartButton = true;
+let isMicMuted = false;
 // Buttons
 const videoElement = document.querySelector("video");
 const startBtn = document.querySelector(".startBtn");
@@ -17,11 +19,17 @@ const captureButton = document.querySelector(".captureButton");
 const micBtn = document.querySelector(".micBtn");
 
 captureButton.disabled = true;
-micBtn.disabled = true;
+
 stopBtn.disabled = true;
 startBtn.disabled = true;
 
-let isStartButton = true;
+micBtn.onclick = (e) => {
+  isMicMuted = !isMicMuted;
+
+  isMicMuted
+    ? (micBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>')
+    : (micBtn.innerHTML = '<i class="fas fa-microphone"></i>');
+};
 
 startBtn.onclick = (e) => {
   console.log("mediaRecorder.state", mediaRecorder.state);
@@ -68,15 +76,10 @@ async function getVideoSources() {
       types: ["window", "screen"],
     });
 
-    inputSources.map((source) => {
+    inputSources.forEach((source) => {
       if (source.name === "Entire Screen") {
         windowScreenSource = source;
       }
-      return {
-        id: source.display_id,
-        label: source.name,
-        click: () => selectSource(source),
-      };
     });
   } catch (err) {
     console.log(err);
@@ -85,16 +88,18 @@ async function getVideoSources() {
 getVideoSources();
 
 // Change the videoSource window to record
-async function selectSource() {
-  captureButton.disabled = false;
-  micBtn.disabled = false;
-  videoSelectBtn.disabled = true;
-  startBtn.disabled = false;
 
+async function getAudioStream() {
   const constraintAudio = {
     audio: true,
   };
+  const audioStream = await navigator.mediaDevices.getUserMedia(
+    constraintAudio
+  );
+  return audioStream;
+}
 
+async function getVideoStream() {
   const constraintVideo = {
     audio: false,
     video: {
@@ -105,17 +110,30 @@ async function selectSource() {
     },
   };
 
-  const audioStream = await navigator.mediaDevices.getUserMedia(
-    constraintAudio
-  );
   const videoStream = await navigator.mediaDevices.getUserMedia(
     constraintVideo
   );
 
-  const stream = new MediaStream([
-    ...videoStream.getVideoTracks(),
-    ...audioStream.getAudioTracks(),
-  ]);
+  return videoStream;
+}
+async function selectSource() {
+  captureButton.disabled = false;
+  micBtn.disabled = true;
+  videoSelectBtn.disabled = true;
+  startBtn.disabled = false;
+
+  const audioStream = await getAudioStream();
+
+  const videoStream = await getVideoStream();
+  let stream;
+  if (isMicMuted) {
+    stream = new MediaStream(videoStream.getVideoTracks());
+  } else {
+    stream = new MediaStream([
+      ...videoStream.getVideoTracks(),
+      ...audioStream.getAudioTracks(),
+    ]);
+  }
 
   // Preview the source in a video element
   videoElement.srcObject = stream;
@@ -141,15 +159,19 @@ function handleDataAvailable(e) {
 
 // Saves the video file on stop
 async function handleStop(e) {
+  videoSelectBtn.disabled = false;
+  micBtn.disabled = false;
+  captureBtn.disabled = true;
+  startBtn.disabled = true;
   const blob = new Blob(recordedChunks, {
-    type: "video/mp4; codecs=vp9",
+    type: "video/webm; codecs=vp9",
   });
 
   const buffer = Buffer.from(await blob.arrayBuffer());
 
   const { filePath } = await dialog.showSaveDialog({
     buttonLabel: "Save video",
-    defaultPath: `vid-${Date.now()}.mp4`,
+    defaultPath: `vid-${Date.now()}.webm`,
   });
 
   if (filePath) {
